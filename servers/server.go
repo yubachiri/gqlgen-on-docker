@@ -41,8 +41,8 @@ func InitDB() {
 
 	// Create the database. This is a one-time step.
 	// Comment out if running multiple times - You may see an error otherwise
-	db.Exec("CREATE DATABASE test_db")
-	db.Exec("USE test_db")
+	db.Exec("CREATE DATABASE app_db")
+	db.Exec("USE app_db")
 
 	// Migration to create tables for Order and Item schema
 	db.AutoMigrate(&model.Order{}, &model.Item{})
