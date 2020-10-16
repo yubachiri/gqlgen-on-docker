@@ -11,7 +11,14 @@ import (
 )
 
 func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
-	panic(fmt.Errorf("not implemented"))
+	items := mapItemsFromInput(input.Items)
+	order := model.Order{
+		CustomerName: input.CustomerName,
+		OrderAmount:  input.OrderAmount,
+		Items:        &items,
+	}
+	r.DB.Create(&order)
+	return &order, nil
 }
 
 func (r *mutationResolver) UpdateOrder(ctx context.Context, orderID int, input model.OrderInput) (*model.Order, error) {
@@ -31,6 +38,18 @@ func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResol
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
+
+func mapItemsFromInput(itemsInput []*model.ItemInput) []model.Item {
+	var items []model.Item
+	for _, itemInput := range itemsInput {
+		items = append(items, model.Item{
+			ProductCode: itemInput.ProductCode,
+			ProductName: itemInput.ProductName,
+			Quantity:    itemInput.Quantity,
+		})
+	}
+	return items
+}
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
