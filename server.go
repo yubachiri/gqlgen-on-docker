@@ -20,7 +20,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-const defaultPort = "8080"
+const defaultPort = "3000"
 
 func main() {
 	port := os.Getenv("PORT")
@@ -30,7 +30,7 @@ func main() {
 
 	initDB()
 
-	srv := handler.New(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
@@ -68,6 +68,6 @@ func initDB() {
 	}
 	db.ShowSQL(true)
 	db.SetMaxOpenConns(2)
-	db.Sync2(model.Order{}, model.Item{})
+	db.Sync2(model.Todo{})
 	fmt.Println("init data base ok")
 }

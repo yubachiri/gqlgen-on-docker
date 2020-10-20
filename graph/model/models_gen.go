@@ -2,28 +2,19 @@
 
 package model
 
-type Item struct {
-	ID          int    `json:"id"`
-	ProductCode string `json:"productCode"`
-	ProductName string `json:"productName"`
-	Quantity    int    `json:"quantity"`
+type NewTodo struct {
+	Text   string `json:"text"`
+	UserID string `json:"userId"`
 }
 
-type ItemInput struct {
-	ProductCode string `json:"productCode"`
-	ProductName string `json:"productName"`
-	Quantity    int    `json:"quantity"`
+type Todo struct {
+	ID   string `json:"id"`
+	Text string `json:"text"`
+	Done bool   `json:"done"`
+	User *User  `json:"user"`
 }
 
-type Order struct {
-	ID           int     `json:"id"`
-	CustomerName string  `json:"customerName"`
-	OrderAmount  float64 `json:"orderAmount"`
-	Items        []*Item `json:"items"`
-}
-
-type OrderInput struct {
-	CustomerName string       `json:"customerName"`
-	OrderAmount  float64      `json:"orderAmount"`
-	Items        []*ItemInput `json:"items"`
+type User struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
 }
