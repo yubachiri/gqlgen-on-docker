@@ -8,29 +8,25 @@ import (
 	"fmt"
 	"go-graphql-api-sample/graph/generated"
 	"go-graphql-api-sample/graph/model"
+	"math/rand"
 )
 
-func (r *mutationResolver) CreateOrder(ctx context.Context, input model.OrderInput) (*model.Order, error) {
-	items := mapItemsFromInput(input.Items)
-	order := model.Order{
-		CustomerName: input.CustomerName,
-		OrderAmount:  input.OrderAmount,
-		Items:        &items,
+func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+	todo := &model.Todo{
+		Text: input.Text,
+		ID:   fmt.Sprintf("T%d", rand.Int()),
+		User: &model.User{ID: input.UserID, Name: "user " + input.UserID},
 	}
-	r.DB.Create(&order)
-	return &order, nil
+	r.todos = append(r.todos, todo)
+	return todo, nil
 }
 
-func (r *mutationResolver) UpdateOrder(ctx context.Context, orderID int, input model.OrderInput) (*model.Order, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+	return r.todos, nil
 }
 
-func (r *mutationResolver) DeleteOrder(ctx context.Context, orderID int) (bool, error) {
-	panic(fmt.Errorf("not implemented"))
-}
-
-func (r *queryResolver) Orders(ctx context.Context) ([]*model.Order, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+	return r.users, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
@@ -38,18 +34,6 @@ func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResol
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
-
-func mapItemsFromInput(itemsInput []*model.ItemInput) []model.Item {
-	var items []model.Item
-	for _, itemInput := range itemsInput {
-		items = append(items, model.Item{
-			ProductCode: itemInput.ProductCode,
-			ProductName: itemInput.ProductName,
-			Quantity:    itemInput.Quantity,
-		})
-	}
-	return items
-}
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
