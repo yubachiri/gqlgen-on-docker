@@ -1,6 +1,8 @@
 package graph
 
-import "go-graphql-api-sample/graph/model"
+import (
+	"go-graphql-api-sample/graph/model"
+)
 
 // This file will not be regenerated automatically.
 //
@@ -9,4 +11,5 @@ import "go-graphql-api-sample/graph/model"
 // Resolver リゾルバです
 type Resolver struct {
 	todos []*model.Todo
+	users []*model.User
 }
