@@ -39,7 +39,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
-var db *xorm.Engine
+var DB *xorm.Engine
 
 func initDB() {
 	envErr := godotenv.Load()
@@ -62,12 +62,12 @@ func initDB() {
 	DsName := user + ":" + password + "@" + connectMethod + "(" + containerName + ":" + port + ")/" + name
 
 	err := errors.New("")
-	db, err = xorm.NewEngine(driverName, DsName)
+	DB, err = xorm.NewEngine(driverName, DsName)
 	if err != nil && err.Error() != "" {
 		log.Fatal(err.Error())
 	}
-	db.ShowSQL(true)
-	db.SetMaxOpenConns(2)
-	db.Sync2(model.Todo{})
+	DB.ShowSQL(true)
+	DB.SetMaxOpenConns(2)
+	DB.Sync2(model.Todo{})
 	fmt.Println("init data base ok")
 }

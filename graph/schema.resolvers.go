@@ -25,6 +25,12 @@ func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
 	return r.todos, nil
 }
 
+func (r *queryResolver) Todo(ctx context.Context) (*model.Todo, error) {
+	var todo *model.Todo
+	err := r.DB.Limit(1).Find(&r.todo)
+	return todo, err
+}
+
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	return r.users, nil
 }
